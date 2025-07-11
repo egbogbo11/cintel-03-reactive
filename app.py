@@ -1,7 +1,7 @@
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
-from shiny import App, ui, render, reactive
+from shiny import App, ui, render, reactive, req
 from shinywidgets import output_widget, render_plotly, render_widget
 from palmerpenguins import load_penguins
 
@@ -76,6 +76,7 @@ def server(input, output, session):
 
     @reactive.calc
     def filtered_data():
+        req(input.selected_species_list())
         return penguins_df[
             penguins_df["species"].isin(input.selected_species_list())
         ]
@@ -136,6 +137,4 @@ def server(input, output, session):
 # Run App
 app = App(app_ui, server)
 
-@reactive.calc
-def filtered_data():
-    return penguins_df
+
